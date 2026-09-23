@@ -40,8 +40,18 @@ struct ReportView: View {
 
             section("三、多維度評分（綜合 \(Int(analysis.overallScore)) 分，\(analysis.grade.rawValue)）") {
                 VStack(alignment: .leading, spacing: 6) {
-                    ForEach(analysis.radar.ordered, id: \.label) { axis in
-                        MeterBar(metric: Metric(axis.label, axis.value), tint: Theme.scoreColor(axis.value))
+                    ForEach(analysis.radar.ordered) { axis in
+                        MeterBar(
+                            metric: Metric(axis.label, axis.value),
+                            tint: Theme.scoreColor(axis.drawableValue)
+                        )
+                    }
+
+                    if !analysis.hasInstitutionalData {
+                        Text("本檔無三大法人公開資料，法人面向標示為無資料，綜合評分以其餘 \(analysis.radar.availableValues.count) 個面向平均計算。")
+                            .font(.system(size: 10))
+                            .foregroundColor(Theme.textMuted)
+                            .padding(.top, 2)
                     }
                 }
             }
@@ -53,7 +63,7 @@ struct ReportView: View {
                             .font(.system(size: 11, weight: .semibold))
                             .foregroundColor(Theme.textSecondary)
                         ForEach(analysis.healthMetrics) { metric in
-                            MeterBar(metric: metric, tint: Theme.scoreColor(metric.value))
+                            MeterBar(metric: metric, tint: Theme.scoreColor(metric.drawableValue))
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -72,10 +82,11 @@ struct ReportView: View {
 
             section("五、法人與籌碼") {
                 VStack(alignment: .leading, spacing: 6) {
-                    if analysis.institutionalSeries.isEmpty {
-                        Text("此檔無三大法人資料（上櫃股票或當期無公告）。")
+                    if !analysis.hasInstitutionalData {
+                        Text("此檔無三大法人公開資料（上櫃股票或當期無公告），法人相關項目一律標示為無資料，不提供推估值。")
                             .font(.system(size: 12))
                             .foregroundColor(Theme.textMuted)
+                            .fixedSize(horizontal: false, vertical: true)
                     } else {
                         bullet("近 \(analysis.institutionalSeries.count) 日累積買賣超", "\(Format.signedInteger(analysis.cumulativeNetLots)) 張", Theme.changeColor(analysis.cumulativeNetLots))
                         bullet("近 5 日買賣超", "\(Format.signedInteger(analysis.recentFiveDayNetLots)) 張", Theme.changeColor(analysis.recentFiveDayNetLots))

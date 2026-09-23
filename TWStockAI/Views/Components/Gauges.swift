@@ -4,7 +4,7 @@ import Foundation
 /// 甜甜圈進度環：對應參考設計的健康度／買賣力分布。
 struct DonutGauge: View {
 
-    let value: Double           // 0～100
+    let value: Double?          // 0～100；nil 表示無資料
     let label: String
     let tint: Color
     var diameter: CGFloat = 78
@@ -13,23 +13,33 @@ struct DonutGauge: View {
     var body: some View {
         VStack(spacing: 6) {
             ZStack {
-                Circle()
-                    .stroke(Theme.grid, lineWidth: lineWidth)
+                if let value {
+                    Circle()
+                        .stroke(Theme.grid, lineWidth: lineWidth)
 
-                Circle()
-                    .trim(from: 0, to: min(max(value / 100, 0), 1))
-                    .stroke(tint, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
+                    Circle()
+                        .trim(from: 0, to: min(max(value / 100, 0), 1))
+                        .stroke(tint, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
 
-                Text(Format.ratio(value))
-                    .font(.system(size: diameter * 0.24, weight: .bold, design: .rounded))
-                    .foregroundColor(Theme.textPrimary)
+                    Text(Format.ratio(value))
+                        .font(.system(size: diameter * 0.24, weight: .bold, design: .rounded))
+                        .foregroundColor(Theme.textPrimary)
+                } else {
+                    // 無資料：以虛線圈表示，不畫任何進度
+                    Circle()
+                        .stroke(Theme.grid, style: StrokeStyle(lineWidth: lineWidth, dash: [3, 4]))
+
+                    Text("無資料")
+                        .font(.system(size: diameter * 0.17, weight: .semibold))
+                        .foregroundColor(Theme.textMuted)
+                }
             }
             .frame(width: diameter, height: diameter)
 
             Text(label)
                 .font(.system(size: 11))
-                .foregroundColor(Theme.textSecondary)
+                .foregroundColor(value == nil ? Theme.textMuted : Theme.textSecondary)
                 .multilineTextAlignment(.center)
         }
     }
@@ -52,20 +62,26 @@ struct MeterBar: View {
 
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(Theme.grid)
-                    Capsule()
-                        .fill(tint)
-                        .frame(width: proxy.size.width * min(max(metric.value / 100, 0), 1))
+                    if let value = metric.value {
+                        Capsule()
+                            .fill(Theme.grid)
+                        Capsule()
+                            .fill(tint)
+                            .frame(width: proxy.size.width * min(max(value / 100, 0), 1))
+                    } else {
+                        // 無資料：只畫虛線軌道，不填任何長度
+                        Capsule()
+                            .strokeBorder(Theme.grid, style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
+                    }
                 }
             }
             .frame(height: 8)
 
             if showsValue {
-                Text(Format.ratio(metric.value))
+                Text(metric.displayText)
                     .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .foregroundColor(Theme.textPrimary)
-                    .frame(width: 42, alignment: .trailing)
+                    .foregroundColor(metric.isAvailable ? Theme.textPrimary : Theme.textMuted)
+                    .frame(width: 52, alignment: .trailing)
             }
         }
     }

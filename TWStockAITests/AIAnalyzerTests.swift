@@ -70,14 +70,15 @@ final class AIAnalyzerTests: XCTestCase {
         let analysis = try XCTUnwrap(AIAnalyzer.analyze(dataset: makeDataset(closes: closes)))
 
         // 分段收集，避免單一運算式過長導致編譯器型別推導變慢
-        var percentages: [Double] = analysis.radar.ordered.map(\.value)
-        percentages += analysis.riskRadar.map { $0.value }
-        percentages += analysis.healthMetrics.map(\.value)
-        percentages += analysis.dayTradeRiskMetrics.map(\.value)
-        percentages += analysis.confidenceMetrics.map(\.value)
+        var percentages: [Double] = analysis.radar.availableValues
+        percentages += analysis.riskRadar.compactMap(\.value)
+        percentages += analysis.healthMetrics.compactMap(\.value)
+        percentages += analysis.dayTradeRiskMetrics.compactMap(\.value)
+        percentages += analysis.confidenceMetrics.compactMap(\.value)
         percentages += [analysis.overallScore, analysis.bullEnergy, analysis.bearEnergy]
         percentages += [analysis.marketSentiment, analysis.retailSentiment]
-        percentages += [analysis.institutionalSentiment, analysis.mainForceSentiment]
+        percentages += [analysis.mainForceSentiment]
+        percentages += analysis.institutionalSentiment.map { [$0] } ?? []
         percentages += [analysis.majorBuyPower, analysis.retailBuyPower, analysis.retailSellPressure]
         percentages.append(analysis.dayTradeRiskIndex)
 
@@ -107,13 +108,58 @@ final class AIAnalyzerTests: XCTestCase {
         XCTAssertGreaterThan(rising.overallScore, falling.overallScore)
     }
 
-    func test_無法人資料時相關欄位為空且不影響其他分析() throws {
+    func test_無法人資料時相關欄位標示為無資料而非中性值() throws {
         let closes: [Double] = (1...98).map { 150 + Double($0) * 0.3 }
         let analysis = try XCTUnwrap(AIAnalyzer.analyze(dataset: makeDataset(closes: closes, withInstitutional: false)))
 
+        XCTAssertFalse(analysis.hasInstitutionalData)
         XCTAssertTrue(analysis.institutionalSeries.isEmpty)
         XCTAssertEqual(analysis.cumulativeNetLots, 0)
+
+        // 法人面向不得以中性值填補
+        XCTAssertNil(analysis.radar.institutional, "法人分數應為無資料")
+        XCTAssertNil(analysis.institutionalSentiment, "法人情緒應為無資料")
+        XCTAssertEqual(analysis.radar.availableValues.count, 5, "綜合評分應只計入五個面向")
+
+        let institutionalSupport = try XCTUnwrap(analysis.healthMetrics.first { $0.label == "法人支撐度" })
+        XCTAssertFalse(institutionalSupport.isAvailable)
+        XCTAssertEqual(institutionalSupport.displayText, "無資料")
+
+        let institutionalRisk = try XCTUnwrap(analysis.riskRadar.first { $0.label == "法人風險" })
+        XCTAssertFalse(institutionalRisk.isAvailable)
+
+        // 文字結論不得出現法人推論
+        XCTAssertTrue(analysis.aiConclusion.contains("無三大法人公開資料"))
+        XCTAssertFalse(analysis.aiConclusion.contains("法人近 5 日合計"))
+        XCTAssertFalse(analysis.mainForceVerdict.contains("布局"))
+
+        // 其餘分析照常運作
         XCTAssertFalse(analysis.heatCells.isEmpty)
+        XCTAssertTrue((0...100).contains(analysis.overallScore))
+    }
+
+    func test_有法人資料時法人面向皆有數值() throws {
+        let closes: [Double] = (1...98).map { 150 + Double($0) * 0.3 }
+        let analysis = try XCTUnwrap(AIAnalyzer.analyze(dataset: makeDataset(closes: closes)))
+
+        XCTAssertTrue(analysis.hasInstitutionalData)
+        XCTAssertNotNil(analysis.radar.institutional)
+        XCTAssertNotNil(analysis.institutionalSentiment)
+        XCTAssertEqual(analysis.radar.availableValues.count, 6)
+        XCTAssertTrue(analysis.healthMetrics.allSatisfy(\.isAvailable))
+        XCTAssertTrue(analysis.riskRadar.allSatisfy(\.isAvailable))
+    }
+
+    func test_無法人資料時籌碼分數改由價量推導且不等於固定中性值() throws {
+        // 明顯的多頭與空頭走勢應得到不同的籌碼分數，證明不是固定回傳 50
+        let rising: [Double] = (1...98).map { Double(100 + $0) }
+        let falling: [Double] = (1...98).map { Double(200 - $0) }
+
+        let bull = try XCTUnwrap(AIAnalyzer.analyze(dataset: makeDataset(closes: rising, withInstitutional: false)))
+        let bear = try XCTUnwrap(AIAnalyzer.analyze(dataset: makeDataset(closes: falling, withInstitutional: false)))
+
+        XCTAssertGreaterThan(bull.radar.chips, bear.radar.chips)
+        XCTAssertNotEqual(bull.radar.chips, 50, accuracy: 0.001)
     }
 
     func test_主力成本結構分布能產生堆疊資料() {

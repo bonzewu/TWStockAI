@@ -3,7 +3,7 @@ import SwiftUI
 /// 多邊形雷達圖，用於「多維度判讀」與「風險雷達圖」兩個面板。
 struct RadarChartView: View {
 
-    let axes: [(label: String, value: Double)]   // 每軸 0～100
+    let axes: [RadarAxis]   // 每軸 0～100；value 為 nil 代表無資料
     let tint: Color
     var centerText: String?
     var centerSubtext: String?
@@ -41,9 +41,10 @@ struct RadarChartView: View {
                     context.fill(dataPath, with: .color(tint.opacity(0.35)))
                     context.stroke(dataPath, with: .color(tint), lineWidth: 2)
 
-                    // 端點
+                    // 端點：無資料的軸不畫端點，避免看起來像有數值
                     axes.indices.forEach { index in
-                        let ratio = min(max(axes[index].value / 100, 0), 1)
+                        guard axes[index].isAvailable else { return }
+                        let ratio = min(max(axes[index].drawableValue / 100, 0), 1)
                         let position = point(center: center, radius: radius * ratio, index: index, count: axes.count)
                         context.fill(
                             Path(ellipseIn: CGRect(x: position.x - 3, y: position.y - 3, width: 6, height: 6)),
@@ -52,13 +53,21 @@ struct RadarChartView: View {
                     }
                 }
 
-                // 軸標籤
-                ForEach(axes.indices, id: \.self) { index in
-                    let position = point(center: center, radius: radius + 18, index: index, count: axes.count)
-                    Text(axes[index].label)
-                        .font(.system(size: 10))
-                        .foregroundColor(Theme.textSecondary)
-                        .position(position)
+                // 軸標籤：無資料的軸以暗色加註說明
+                ForEach(axes) { axis in
+                    let index = axes.firstIndex(of: axis) ?? 0
+                    let position = point(center: center, radius: radius + 20, index: index, count: axes.count)
+                    VStack(spacing: -1) {
+                        Text(axis.label)
+                            .font(.system(size: 10))
+                            .foregroundColor(axis.isAvailable ? Theme.textSecondary : Theme.textMuted)
+                        if !axis.isAvailable {
+                            Text("無資料")
+                                .font(.system(size: 8))
+                                .foregroundColor(Theme.textMuted)
+                        }
+                    }
+                    .position(position)
                 }
 
                 // 中央文字（綜合等級）
@@ -100,7 +109,7 @@ struct RadarChartView: View {
     private func valuePath(center: CGPoint, radius: Double) -> Path {
         var path = Path()
         axes.indices.forEach { index in
-            let ratio = min(max(axes[index].value / 100, 0), 1)
+            let ratio = min(max(axes[index].drawableValue / 100, 0), 1)
             let position = point(center: center, radius: radius * ratio, index: index, count: axes.count)
             index == 0 ? path.move(to: position) : path.addLine(to: position)
         }

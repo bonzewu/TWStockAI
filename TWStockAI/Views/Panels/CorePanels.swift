@@ -98,6 +98,13 @@ struct MultiDimensionPanel: View {
                     Text("\(Int(analysis.overallScore)) / 100")
                         .font(.system(size: 11, weight: .bold)).foregroundColor(Theme.accent)
                 }
+
+                if !analysis.hasInstitutionalData {
+                    Text("本檔無法人資料，綜合評分以其餘 \(analysis.radar.availableValues.count) 個面向平均計算。")
+                        .font(.system(size: 9))
+                        .foregroundColor(Theme.textMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
         }
     }
@@ -132,6 +139,13 @@ struct RiskRadarPanel: View {
             VStack(spacing: 6) {
                 RadarChartView(axes: analysis.riskRadar, tint: Theme.warning)
                     .frame(height: 180)
+
+                if !analysis.hasInstitutionalData {
+                    Text("法人風險無資料，未計入本圖。")
+                        .font(.system(size: 9))
+                        .foregroundColor(Theme.textMuted)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
 
                 HStack {
                     Text("主力風險等級：")

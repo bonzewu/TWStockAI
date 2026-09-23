@@ -41,8 +41,8 @@ struct HealthPanel: View {
                             value: metric.value,
                             label: metric.label,
                             tint: metric.label == "波動風險度"
-                                ? Theme.scoreColor(100 - metric.value)
-                                : Theme.scoreColor(metric.value),
+                                ? Theme.scoreColor(100 - metric.drawableValue)
+                                : Theme.scoreColor(metric.drawableValue),
                             diameter: 62,
                             lineWidth: 6
                         )
@@ -54,7 +54,7 @@ struct HealthPanel: View {
                     Text(analysis.healthSummary)
                         .font(.system(size: 12, weight: .bold))
                         .foregroundColor(Theme.scoreColor(analysis.healthAverage))
-                    Text("（平均 \(Int(analysis.healthAverage)) 分）")
+                    Text("（\(analysis.healthMetrics.filter(\.isAvailable).count) 項平均 \(Int(analysis.healthAverage)) 分）")
                         .font(.system(size: 10)).foregroundColor(Theme.textMuted)
                 }
             }
@@ -138,12 +138,12 @@ struct SentimentPanel: View {
         }
     }
 
-    private func sentimentRow(_ label: String, _ value: Double) -> some View {
+    private func sentimentRow(_ label: String, _ value: Double?) -> some View {
         HStack(spacing: 6) {
             Text("\(label)：").font(.system(size: 11)).foregroundColor(Theme.textMuted)
-            Text(Format.ratio(value))
+            Text(value.map { Format.ratio($0) } ?? "無資料")
                 .font(.system(size: 12, weight: .bold))
-                .foregroundColor(Theme.scoreColor(value))
+                .foregroundColor(value.map { Theme.scoreColor($0) } ?? Theme.textMuted)
             Spacer()
         }
     }
@@ -274,7 +274,10 @@ struct BuyPowerPanel: View {
                 }
 
                 if let latest = dataset.latest {
-                    Text("資料時間：\(DateFormatter.twDate.string(from: latest.date))（法人買進／賣出占成交量比例，近 20 日平均）")
+                    Text("資料時間：\(DateFormatter.twDate.string(from: latest.date))"
+                         + (analysis.hasInstitutionalData
+                            ? "（法人買進／賣出占成交量比例，近 20 日平均）"
+                            : "（本檔無法人資料，改以近 20 日價量結構推估）"))
                         .font(.system(size: 9))
                         .foregroundColor(Theme.textMuted)
                 }

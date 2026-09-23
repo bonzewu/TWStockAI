@@ -43,8 +43,10 @@ enum AIAnalyzer {
             kd: kdSeries, macd: macdSeries, rsi: rsiSeries,
             institutional: dataset.institutional, volatility: volatility
         )
-        let overallScore = (radar.institutional + radar.momentum + radar.trend
-                            + radar.chips + radar.liquidity + radar.volatility) / 6
+        // 綜合評分只計入有資料的面向；缺法人資料時以其餘五軸平均，不補中性值
+        let availableScores = radar.availableValues
+        let overallScore = availableScores.reduce(0, +) / Double(max(availableScores.count, 1))
+        let hasInstitutional = !dataset.institutional.isEmpty
 
         // ---- 法人統計 ----
         let cumulativeNet = dataset.institutional.map(\.total).reduce(0, +)
@@ -58,14 +60,15 @@ enum AIAnalyzer {
 
         // ---- 健康度五項 ----
         let health = healthMetrics(radar: radar, volatility: volatility, dayTradeRisk: dayTrade.index)
-        let healthAverage = health.map(\.value).reduce(0, +) / Double(max(health.count, 1))
+        let healthValues = health.compactMap(\.value)
+        let healthAverage = healthValues.reduce(0, +) / Double(max(healthValues.count, 1))
 
         // ---- 決策核心 ----
         let decision = decisionCore(
             latest: latest, radar: radar, overallScore: overallScore,
             strengthVersusCost: strengthVersusCost,
             recentFiveNet: recentFiveNet, dayTradeIndex: dayTrade.index,
-            chipHealth: health.first?.value ?? 50,
+            chipHealth: health.first?.value ?? 50, hasInstitutional: hasInstitutional,
             support: (supportZone, deepSupport),
             resistance: (pressureZone, shortPressure)
         )
@@ -96,6 +99,7 @@ enum AIAnalyzer {
             directionBias: forecast.up >= forecast.down ? "多頭 \(Int(forecast.up.rounded()))%" : "空頭 \(Int(forecast.down.rounded()))%",
             annualizedDrift: forecast.annualizedDrift,
             strengthVersusCost: strengthVersusCost,
+            hasInstitutionalData: hasInstitutional,
             institutionalSeries: dataset.institutional,
             cumulativeNetLots: cumulativeNet,
             recentFiveDayNetLots: recentFiveNet,
@@ -122,7 +126,10 @@ enum AIAnalyzer {
             bearStrength: energy.bear,
             volumeStrength: radar.liquidity,
             signalGrade: signalGrade(score: overallScore),
-            mainForceVerdict: verdict(strengthVersusCost: strengthVersusCost, recentFiveNet: recentFiveNet, radar: radar),
+            mainForceVerdict: verdict(
+                strengthVersusCost: strengthVersusCost, recentFiveNet: recentFiveNet,
+                radar: radar, hasInstitutional: hasInstitutional
+            ),
             aiConclusion: conclusionText(
                 dataset: dataset, recentFiveNet: recentFiveNet,
                 strengthVersusCost: strengthVersusCost,
@@ -181,10 +188,20 @@ enum AIAnalyzer {
             return clamp(rsiPart + kdPart + macdPart, 0, 100)
         }()
 
-        // 籌碼：法人買賣超佔近 20 日均量比例
+        // 籌碼：有法人資料時看買賣超佔均量比例；
+        // 沒有法人資料時（例如上櫃股）改以「收盤相對 20 日 VWAP 的位置」推估籌碼強弱，
+        // 這是純價量推導，不會冒充法人訊號。
         let chipScore: Double = {
             let averageVolume = volumes.suffix(20).reduce(0, +) / Double(max(min(volumes.count, 20), 1))
-            guard averageVolume > 0, !institutional.isEmpty else { return 50 }
+
+            guard !institutional.isEmpty else {
+                guard let cost = Indicators.vwap(quotes: quotes, period: 20), cost > 0,
+                      let latestClose = closes.last else { return 50 }
+                let deviation = (latestClose - cost) / cost * 100
+                return clamp(50 + deviation * 3, 0, 100)
+            }
+
+            guard averageVolume > 0 else { return 50 }
             let net = institutional.suffix(5).map(\.total).reduce(0, +)
             let ratio = net / (averageVolume * 5) * 100
             return clamp(50 + ratio * 2.5, 0, 100)
@@ -201,9 +218,9 @@ enum AIAnalyzer {
         // 波動：年化波動率越低分數越高（25% 對應 70 分，60% 以上低於 30 分）
         let volatilityScore = clamp(100 - volatility * 1.35, 5, 100)
 
-        // 法人：近 5 日法人淨額方向與連續性
-        let institutionalScore: Double = {
-            guard !institutional.isEmpty else { return 50 }
+        // 法人：近 5 日法人淨額方向與連續性；沒有公開資料時回傳 nil（標示為無資料）
+        let institutionalScore: Double? = {
+            guard !institutional.isEmpty else { return nil }
             let recent = institutional.suffix(5)
             let positiveDays = recent.filter { $0.total > 0 }.count
             let net = recent.map(\.total).reduce(0, +)
@@ -227,7 +244,7 @@ enum AIAnalyzer {
     private static func decisionCore(
         latest: DailyQuote, radar: RadarScores, overallScore: Double,
         strengthVersusCost: Double, recentFiveNet: Double, dayTradeIndex: Double,
-        chipHealth: Double,
+        chipHealth: Double, hasInstitutional: Bool,
         support: (Double, Double), resistance: (Double, Double)
     ) -> DecisionCore {
 
@@ -258,6 +275,13 @@ enum AIAnalyzer {
         }()
 
         let mainForceBehavior: String = {
+            // 沒有法人資料時不能推論法人動向，改以價量位置描述，並標明推估來源
+            guard hasInstitutional else {
+                if strengthVersusCost > 8 { return "價量偏強（價量推估）" }
+                if strengthVersusCost < -8 { return "價量偏弱（價量推估）" }
+                return "區間整理（價量推估）"
+            }
+
             if recentFiveNet > 0, strengthVersusCost > 5 { return "積極拉抬" }
             if recentFiveNet > 0 { return "低檔承接" }
             if strengthVersusCost > 10 { return "調節減碼" }
@@ -315,7 +339,18 @@ enum AIAnalyzer {
         // 主力賣出異常：法人近 5 日賣超相對均量的比重
         let averageVolume = recent.map(\.volumeLots).reduce(0, +) / Double(max(recent.count, 1))
         let sellPressure: Double = {
-            guard averageVolume > 0, !institutional.isEmpty else { return 50 }
+            guard averageVolume > 0 else { return 50 }
+
+            // 無法人資料時改以「上影線佔比 + 量增」推估賣壓，屬純價量推導
+            guard !institutional.isEmpty else {
+                guard let latest else { return 50 }
+                let range = latest.high - latest.low
+                let upperShadow = range > 0 ? (latest.high - max(latest.open, latest.close)) / range : 0
+                let volumeRatio = latest.volumeLots / averageVolume
+                // 權重刻意壓低，避免長上影線搭配爆量時直接觸頂而失去鑑別度
+                return clamp(upperShadow * 60 + (volumeRatio - 1) * 25 + 20, 0, 100)
+            }
+
             let net = institutional.suffix(5).map(\.total).reduce(0, +)
             return clamp(50 - net / (averageVolume * 5) * 250, 0, 100)
         }()
@@ -385,12 +420,20 @@ enum AIAnalyzer {
     // MARK: - 健康度
 
     private static func healthMetrics(radar: RadarScores, volatility: Double, dayTradeRisk: Double) -> [Metric] {
-        [
-            Metric("籌碼健康度", clamp((radar.chips + radar.institutional) / 2, 0, 100)),
+        // 籌碼健康度：有法人資料時取兩者平均，否則只採計價量推導的籌碼分數
+        let chipHealth = radar.institutional.map { (radar.chips + $0) / 2 } ?? radar.chips
+
+        // 法人支撐度：沒有法人資料就標示無資料，不以其他指標替代
+        let institutionalSupport = radar.institutional.map {
+            clamp($0 * 0.7 + (100 - dayTradeRisk) * 0.3, 0, 100)
+        }
+
+        return [
+            Metric("籌碼健康度", clamp(chipHealth, 0, 100)),
             Metric("技術結構度", clamp((radar.trend * 0.6 + radar.momentum * 0.4), 0, 100)),
             Metric("資金動能度", radar.liquidity),
             Metric("波動風險度", clamp(100 - radar.volatility, 0, 100), note: String(format: "年化 %.1f%%", volatility)),
-            Metric("法人支撐度", clamp(radar.institutional * 0.7 + (100 - dayTradeRisk) * 0.3, 0, 100))
+            Metric("法人支撐度", institutionalSupport)
         ]
     }
 
@@ -435,13 +478,18 @@ enum AIAnalyzer {
 
     private static func sentimentScores(
         radar: RadarScores, energy: (bull: Double, bear: Double, ratio: Double), dayTradeIndex: Double
-    ) -> (market: Double, retail: Double, institutional: Double, mainForce: Double, majorBuy: Double, retailSell: Double) {
+    ) -> (market: Double, retail: Double, institutional: Double?, mainForce: Double, majorBuy: Double, retailSell: Double) {
 
         let market = clamp((radar.trend * 0.35 + radar.momentum * 0.35 + energy.bull * 0.3), 0, 100)
         let retail = clamp(energy.bull * 0.5 + dayTradeIndex * 0.5, 0, 100)
+
+        // 法人情緒直接反映法人分數；沒有法人資料時維持 nil
         let institutional = radar.institutional
+
         let mainForce = clamp((radar.chips * 0.6 + (100 - dayTradeIndex) * 0.4), 0, 100)
-        let majorBuy = clamp(radar.institutional * 0.5 + radar.chips * 0.5, 0, 100)
+
+        // 大戶買盤：有法人資料時混合法人與籌碼，否則只用價量推導的籌碼分數
+        let majorBuy = clamp(radar.institutional.map { $0 * 0.5 + radar.chips * 0.5 } ?? radar.chips, 0, 100)
         let retailSell = clamp(100 - majorBuy * 0.6 - energy.bull * 0.2, 0, 100)
         return (market, retail, institutional, mainForce, majorBuy, retailSell)
     }
@@ -449,10 +497,10 @@ enum AIAnalyzer {
     private static func confidenceMetrics(dataset: StockDataset, radar: RadarScores) -> [Metric] {
         // 資料完整度：實際交易日數 ÷ 目標 98 日
         let completeness = clamp(Double(dataset.quotes.count) / 98 * 100, 0, 100)
-        // 訊號穩定度：六面向分數的離散程度越小越穩定
-        let values = radar.ordered.map(\.value)
-        let mean = values.reduce(0, +) / Double(values.count)
-        let deviation = sqrt(values.map { pow($0 - mean, 2) }.reduce(0, +) / Double(values.count))
+        // 訊號穩定度：各面向分數的離散程度越小越穩定（只計入有資料的面向）
+        let values = radar.availableValues
+        let mean = values.reduce(0, +) / Double(max(values.count, 1))
+        let deviation = sqrt(values.map { pow($0 - mean, 2) }.reduce(0, +) / Double(max(values.count, 1)))
         let stability = clamp(100 - deviation * 1.8, 0, 100)
         let institutionalCoverage = dataset.institutional.isEmpty ? 0.0 : 100.0
 
@@ -575,13 +623,13 @@ enum AIAnalyzer {
 
     // MARK: - 風險雷達
 
-    private static func riskRadar(radar: RadarScores, volatility: Double, dayTradeIndex: Double) -> [(String, Double)] {
+    private static func riskRadar(radar: RadarScores, volatility: Double, dayTradeIndex: Double) -> [RadarAxis] {
         [
-            ("流動性風險", clamp(100 - radar.liquidity, 0, 100)),
-            ("波動風險", clamp(volatility * 1.35, 0, 100)),
-            ("趨勢風險", clamp(100 - radar.trend, 0, 100)),
-            ("法人風險", clamp(100 - radar.institutional, 0, 100)),
-            ("籌碼風險", clamp(100 - radar.chips, 0, 100))
+            RadarAxis("流動性風險", clamp(100 - radar.liquidity, 0, 100)),
+            RadarAxis("波動風險", clamp(volatility * 1.35, 0, 100)),
+            RadarAxis("趨勢風險", clamp(100 - radar.trend, 0, 100)),
+            RadarAxis("法人風險", radar.institutional.map { clamp(100 - $0, 0, 100) }),
+            RadarAxis("籌碼風險", clamp(100 - radar.chips, 0, 100))
         ]
     }
 
@@ -595,7 +643,17 @@ enum AIAnalyzer {
 
     // MARK: - 主力語意與 AI 結論
 
-    private static func verdict(strengthVersusCost: Double, recentFiveNet: Double, radar: RadarScores) -> String {
+    private static func verdict(
+        strengthVersusCost: Double, recentFiveNet: Double,
+        radar: RadarScores, hasInstitutional: Bool
+    ) -> String {
+        // 沒有法人資料時，結論只依價量給出，不冒充主力籌碼判讀
+        guard hasInstitutional else {
+            if strengthVersusCost > 8, radar.trend >= 60 { return "價量走強" }
+            if strengthVersusCost < -8 { return "價量轉弱" }
+            return "區間整理"
+        }
+
         switch (recentFiveNet > 0, strengthVersusCost > 5) {
         case (true, true): return "積極作多"
         case (true, false): return "低檔布局"
@@ -608,10 +666,8 @@ enum AIAnalyzer {
         dataset: StockDataset, recentFiveNet: Double,
         strengthVersusCost: Double, rsi: Double?, radar: RadarScores
     ) -> String {
-        let netText = String(format: "%+.0f 張", recentFiveNet)
         let vwapText = String(format: "%+.1f%%", strengthVersusCost)
         let rsiText = rsi.map { String(format: "%.0f", $0) } ?? "—"
-        let stance = recentFiveNet >= 0 ? "法人偏多承接" : "法人小幅調節"
         let suggestion: String = {
             switch radar.trend {
             case 70...: return "短線可順勢偏多操作，留意壓力區賣壓。"
@@ -620,6 +676,15 @@ enum AIAnalyzer {
             }
         }()
 
+        // 沒有法人資料時，結論必須說明推導基礎只有價量，不得出現法人字眼
+        guard !dataset.institutional.isEmpty else {
+            return "AI 結論：本檔（\(dataset.identity.market.rawValue)）無三大法人公開資料，"
+                + "以下僅依價量研判（收盤相對 20 日 VWAP \(vwapText)、RSI \(rsiText)）：\(suggestion)"
+                + "法人相關面板一律標示為無資料，不提供推估值。"
+        }
+
+        let netText = String(format: "%+.0f 張", recentFiveNet)
+        let stance = recentFiveNet >= 0 ? "法人偏多承接" : "法人小幅調節"
         return "AI 結論：經近 5 日主力行為綜合研判（法人近 5 日合計 \(netText)、收盤相對 20 日 VWAP \(vwapText)、RSI \(rsiText)），\(stance)，\(suggestion)"
     }
 

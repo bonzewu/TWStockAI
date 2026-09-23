@@ -45,6 +45,7 @@ enum HTMLReportBuilder {
 
         <h2>多維度判讀（綜合評分 \(String(format: "%.0f", analysis.overallScore)) / 100，\(analysis.grade.rawValue)）</h2>
         \(radarTable(analysis.radar))
+        \(analysis.hasInstitutionalData ? "" : "<p style=\"color:#6b7791;font-size:11px;\">本檔無三大法人公開資料，法人相關項目一律標示為無資料，綜合評分僅以其餘面向平均計算。</p>")
 
         <h2>健康度綜合評估</h2>
         \(metricTable(analysis.healthMetrics))
@@ -115,11 +116,13 @@ enum HTMLReportBuilder {
     }
 
     private static func radarTable(_ radar: RadarScores) -> String {
-        keyValueTable(radar.ordered.map { ($0.label, String(format: "%.0f 分", $0.value)) })
+        keyValueTable(radar.ordered.map { axis in
+            (axis.label, axis.value.map { String(format: "%.0f 分", $0) } ?? "無資料")
+        })
     }
 
     private static func metricTable(_ metrics: [Metric]) -> String {
-        keyValueTable(metrics.map { ($0.label, Format.ratio($0.value)) })
+        keyValueTable(metrics.map { ($0.label, $0.displayText) })
     }
 
     private static func keyValueTable(_ rows: [(String, String)]) -> String {

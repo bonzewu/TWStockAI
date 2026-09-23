@@ -31,22 +31,49 @@ enum SignalLight: String {
 }
 
 /// 具名的百分比量測值，供各式進度條／甜甜圈使用。
+/// `value` 為 nil 代表該項目缺乏來源資料（例如上櫃股沒有三大法人公告），
+/// 此時畫面會標示「無資料」而不是填入推估值。
 struct Metric: Identifiable, Hashable {
     let id = UUID()
     let label: String
-    let value: Double       // 0～100
+    let value: Double?      // 0～100；nil 表示無資料
     let note: String?
 
-    init(_ label: String, _ value: Double, note: String? = nil) {
+    init(_ label: String, _ value: Double?, note: String? = nil) {
         self.label = label
         self.value = value
         self.note = note
     }
+
+    /// 是否有可顯示的數值。
+    var isAvailable: Bool { value != nil }
+
+    /// 供繪圖使用的數值（無資料時以 0 表示，圖形會縮到最小）。
+    var drawableValue: Double { value ?? 0 }
+
+    /// 顯示文字。
+    var displayText: String { value.map { Format.ratio($0) } ?? "無資料" }
+}
+
+/// 雷達圖的單一軸。
+struct RadarAxis: Identifiable, Hashable {
+    let id = UUID()
+    let label: String
+    let value: Double?      // nil 表示無資料
+
+    init(_ label: String, _ value: Double?) {
+        self.label = label
+        self.value = value
+    }
+
+    var isAvailable: Bool { value != nil }
+    var drawableValue: Double { value ?? 0 }
 }
 
 /// 雷達圖的六個面向分數。
+/// 法人軸在沒有三大法人資料時為 nil（例如上櫃股），不以中性值填補。
 struct RadarScores {
-    let institutional: Double   // 法人
+    let institutional: Double?  // 法人；nil 表示無資料
     let momentum: Double        // 動能
     let trend: Double           // 趨勢
     let chips: Double           // 籌碼
@@ -54,10 +81,13 @@ struct RadarScores {
     let volatility: Double      // 波動
 
     /// 依參考設計的順時針順序輸出（法人 → 動能 → 趨勢 → 籌碼 → 流動性 → 波動）。
-    var ordered: [(label: String, value: Double)] {
-        [("法人", institutional), ("動能", momentum), ("趨勢", trend),
-         ("籌碼", chips), ("流動性", liquidity), ("波動", volatility)]
+    var ordered: [RadarAxis] {
+        [RadarAxis("法人", institutional), RadarAxis("動能", momentum), RadarAxis("趨勢", trend),
+         RadarAxis("籌碼", chips), RadarAxis("流動性", liquidity), RadarAxis("波動", volatility)]
     }
+
+    /// 有資料的軸分數，用於計算綜合評分。
+    var availableValues: [Double] { ordered.compactMap(\.value) }
 }
 
 /// AI 決策核心的條列結論。
@@ -138,7 +168,7 @@ struct AnalysisResult {
     let heatLegend: [HeatLegendItem]
 
     // 面板 05：風險雷達
-    let riskRadar: [(label: String, value: Double)]
+    let riskRadar: [RadarAxis]
     let mainForceRiskLevel: String
     let mainForceRiskIndex: Double
 
@@ -152,6 +182,8 @@ struct AnalysisResult {
     let strengthVersusCost: Double      // 收盤相對主力成本（%）
 
     // 面板 08 / 15：法人行為
+    /// 是否取得三大法人資料；false 時所有法人相關欄位皆標示為無資料。
+    let hasInstitutionalData: Bool
     let institutionalSeries: [InstitutionalFlow]
     let cumulativeNetLots: Double
     let recentFiveDayNetLots: Double
@@ -178,7 +210,7 @@ struct AnalysisResult {
     // 面板 13：市場情緒
     let marketSentiment: Double
     let retailSentiment: Double
-    let institutionalSentiment: Double
+    let institutionalSentiment: Double?
     let mainForceSentiment: Double
 
     // 面板 14：AI 信心維度
