@@ -1,0 +1,690 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BA631BD0875B9B00294AB383 /* AIAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B52D49C154EF6A16D14C57 /* AIAnalyzer.swift */; };
+		4A4666687519DCF493B5939B /* AnalysisModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECA5AC54E4164C5FF3E79 /* AnalysisModels.swift */; };
+		7E2743764CB1AE11ACAE7C2A /* Indicators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432F9F0155EBBA3C5BF859ED /* Indicators.swift */; };
+		FE79D0E5F9923A74011A0AEC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855696CB07EEC90A39816640 /* AppState.swift */; };
+		CD9BE6CB2CC615A50A7A3EBB /* TWStockAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC7880CBFA4B36BBBD25F0 /* TWStockAIApp.swift */; };
+		6C81039DCCE3EAE81642EB96 /* StockModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D4C4101992CBA870B3CF11 /* StockModels.swift */; };
+		3F41819F6E234519C16D76A7 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594205558AC69CC559918D02 /* ExportService.swift */; };
+		FBFE79666EB2970976DF6E30 /* HTMLReportBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57359629395736CAEF3AA4B1 /* HTMLReportBuilder.swift */; };
+		F598C9A08209D40D24397AD6 /* MarketDataError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328E335C7317C03940319FA7 /* MarketDataError.swift */; };
+		8F846ACF2896474BF2F44D76 /* MarketDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCDB5D32563E4902845069F /* MarketDataService.swift */; };
+		31A73778B17FC58D738A37CB /* TPExClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C595F43D7324FF3C3FB02788 /* TPExClient.swift */; };
+		96B8D989C6AB5E1AF86C162A /* TWSEClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DDBDCFCB8AC1607ACF5C27 /* TWSEClient.swift */; };
+		5157498819E4F074393E019F /* TWSEDateUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5602468BA6DF482D6CB5484 /* TWSEDateUtility.swift */; };
+		6483503934AB8D02E8976DF8 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5200ED84CF023E458EBA0FAB /* Theme.swift */; };
+		600EB2FF345E70F105429120 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6E07A1D813406F89622B9F /* AlertsView.swift */; };
+		BDF144D62637524684B8FF42 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C899D0708FD313AC9324A3B /* DashboardView.swift */; };
+		442D9B2B73C2044EE92696EA /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735948A2E82938817798FA0D /* HeaderView.swift */; };
+		325C0D5008A24FDBAA6BA73A /* KDMAChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 301AD1F5B6110C0AFB8679FE /* KDMAChartView.swift */; };
+		EC252436456D4187BB8ECDD9 /* MACDChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666EB8E28EAA621188EFE6DA /* MACDChartView.swift */; };
+		212AD4F0DB2F314B5B908092 /* RawDataTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3666DBAD7A43035AA17D9B /* RawDataTableView.swift */; };
+		E802F4EF0A3A984296431A15 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65012ACD6A92D82B803C0D94 /* ReportView.swift */; };
+		4BE9E7E6CC62AFA9B5F14798 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87AAE8E155186D76BB4069B /* RootView.swift */; };
+		826F0611221BC82C676C15E4 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07F75A25D68702EB66B0D1E /* ToolbarView.swift */; };
+		3FFDC91017695A7DBD90AEB5 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61BAF35C85A86D728517A9F /* WelcomeView.swift */; };
+		4D895B21785DB2163A02F1BC /* ChartSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DAF4467D18F5BC42898460 /* ChartSupport.swift */; };
+		4BD2D8AA0EF7E3476CF19BED /* Gauges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F0BF83A6E65082DA0DE584 /* Gauges.swift */; };
+		2ADA92126F89EFAD90330975 /* HeatMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49152D4D920B6F9750EE328 /* HeatMapView.swift */; };
+		0F3F79F885F5BD5281AF7CB3 /* PanelCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF1E7FC634A60460B158058 /* PanelCard.swift */; };
+		AFD9C7200696A5F1062F3749 /* RadarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345E4F684C08CA2F6E7CED8 /* RadarChartView.swift */; };
+		1FC47E25D6981891187CAFF5 /* CorePanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439C5CB955D8D08FD6F3790D /* CorePanels.swift */; };
+		E4EA8BBE6F8DD53473A2E55E /* FlowPanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE0B9401976E38783052FCC /* FlowPanels.swift */; };
+		B5A9BFEE31CE2C4A66CECFCB /* MainChartPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9575FECCD2E7A7D3ACD8BA92 /* MainChartPanel.swift */; };
+		1FA2CF58B2056BDDD2241786 /* SummaryPanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED99798677B27F0A358FDE6 /* SummaryPanels.swift */; };
+		3D86999844433BC063FD9FAC /* AIAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A63E93D5EC01ACF02B5954 /* AIAnalyzerTests.swift */; };
+		E7079188C26C6B6AEABDFEDB /* IndicatorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BFF42CB3E4FE98A124CE6 /* IndicatorsTests.swift */; };
+		9576A190F56CF9D489B7EED5 /* LiveAPIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCECC3035CFEF3D232BED33F /* LiveAPIIntegrationTests.swift */; };
+		B2828D1D13E1F128BA09C79B /* MarketDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B0E44A3E2A0DD1C37A9509 /* MarketDataServiceTests.swift */; };
+		8541D1472CA504012CFB2EF4 /* ParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E70C4341FDC1B03FFB64B98 /* ParsingTests.swift */; };
+		D4A623B73C05A7E95BE290CD /* SnapshotRenderingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DACCBA69A2D4B89188C878E /* SnapshotRenderingTests.swift */; };
+		691C8F3C7459FED4B961F13B /* AppFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6518C01450C107F9473F9D /* AppFlowUITests.swift */; };
+		53501A254B61B8D1A3FAFF43 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DB0AA1F0CA718952AE3F2F0 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		934C6EF0F0C9FD20BBBABF8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FDC0B631DC5F59D044C55B31 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B2D649EAEFC2358EB3663E6A;
+			remoteInfo = "TWStockAI";
+		};
+		86C4FCB2D8C94569E77BB750 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FDC0B631DC5F59D044C55B31 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B2D649EAEFC2358EB3663E6A;
+			remoteInfo = "TWStockAI";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C4B52D49C154EF6A16D14C57 /* AIAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIAnalyzer.swift"; sourceTree = "<group>"; };
+		55AECA5AC54E4164C5FF3E79 /* AnalysisModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnalysisModels.swift"; sourceTree = "<group>"; };
+		432F9F0155EBBA3C5BF859ED /* Indicators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Indicators.swift"; sourceTree = "<group>"; };
+		855696CB07EEC90A39816640 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState.swift"; sourceTree = "<group>"; };
+		2EDC7880CBFA4B36BBBD25F0 /* TWStockAIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TWStockAIApp.swift"; sourceTree = "<group>"; };
+		28D4C4101992CBA870B3CF11 /* StockModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StockModels.swift"; sourceTree = "<group>"; };
+		594205558AC69CC559918D02 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportService.swift"; sourceTree = "<group>"; };
+		57359629395736CAEF3AA4B1 /* HTMLReportBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTMLReportBuilder.swift"; sourceTree = "<group>"; };
+		328E335C7317C03940319FA7 /* MarketDataError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarketDataError.swift"; sourceTree = "<group>"; };
+		9CCDB5D32563E4902845069F /* MarketDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarketDataService.swift"; sourceTree = "<group>"; };
+		C595F43D7324FF3C3FB02788 /* TPExClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TPExClient.swift"; sourceTree = "<group>"; };
+		F9DDBDCFCB8AC1607ACF5C27 /* TWSEClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TWSEClient.swift"; sourceTree = "<group>"; };
+		C5602468BA6DF482D6CB5484 /* TWSEDateUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TWSEDateUtility.swift"; sourceTree = "<group>"; };
+		5200ED84CF023E458EBA0FAB /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme.swift"; sourceTree = "<group>"; };
+		7E6E07A1D813406F89622B9F /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlertsView.swift"; sourceTree = "<group>"; };
+		0C899D0708FD313AC9324A3B /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DashboardView.swift"; sourceTree = "<group>"; };
+		735948A2E82938817798FA0D /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HeaderView.swift"; sourceTree = "<group>"; };
+		301AD1F5B6110C0AFB8679FE /* KDMAChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KDMAChartView.swift"; sourceTree = "<group>"; };
+		666EB8E28EAA621188EFE6DA /* MACDChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MACDChartView.swift"; sourceTree = "<group>"; };
+		2A3666DBAD7A43035AA17D9B /* RawDataTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RawDataTableView.swift"; sourceTree = "<group>"; };
+		65012ACD6A92D82B803C0D94 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReportView.swift"; sourceTree = "<group>"; };
+		F87AAE8E155186D76BB4069B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RootView.swift"; sourceTree = "<group>"; };
+		D07F75A25D68702EB66B0D1E /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToolbarView.swift"; sourceTree = "<group>"; };
+		F61BAF35C85A86D728517A9F /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WelcomeView.swift"; sourceTree = "<group>"; };
+		69DAF4467D18F5BC42898460 /* ChartSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChartSupport.swift"; sourceTree = "<group>"; };
+		79F0BF83A6E65082DA0DE584 /* Gauges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gauges.swift"; sourceTree = "<group>"; };
+		B49152D4D920B6F9750EE328 /* HeatMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HeatMapView.swift"; sourceTree = "<group>"; };
+		9FF1E7FC634A60460B158058 /* PanelCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PanelCard.swift"; sourceTree = "<group>"; };
+		4345E4F684C08CA2F6E7CED8 /* RadarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RadarChartView.swift"; sourceTree = "<group>"; };
+		439C5CB955D8D08FD6F3790D /* CorePanels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CorePanels.swift"; sourceTree = "<group>"; };
+		6FE0B9401976E38783052FCC /* FlowPanels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowPanels.swift"; sourceTree = "<group>"; };
+		9575FECCD2E7A7D3ACD8BA92 /* MainChartPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainChartPanel.swift"; sourceTree = "<group>"; };
+		5ED99798677B27F0A358FDE6 /* SummaryPanels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SummaryPanels.swift"; sourceTree = "<group>"; };
+		F6A63E93D5EC01ACF02B5954 /* AIAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIAnalyzerTests.swift"; sourceTree = "<group>"; };
+		D82BFF42CB3E4FE98A124CE6 /* IndicatorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IndicatorsTests.swift"; sourceTree = "<group>"; };
+		BCECC3035CFEF3D232BED33F /* LiveAPIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveAPIIntegrationTests.swift"; sourceTree = "<group>"; };
+		17B0E44A3E2A0DD1C37A9509 /* MarketDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarketDataServiceTests.swift"; sourceTree = "<group>"; };
+		2E70C4341FDC1B03FFB64B98 /* ParsingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParsingTests.swift"; sourceTree = "<group>"; };
+		8DACCBA69A2D4B89188C878E /* SnapshotRenderingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnapshotRenderingTests.swift"; sourceTree = "<group>"; };
+		AB6518C01450C107F9473F9D /* AppFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppFlowUITests.swift"; sourceTree = "<group>"; };
+		3DB0AA1F0CA718952AE3F2F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets"; sourceTree = "<group>"; };
+		658666380131B8FF135897FF /* TWStockAI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "TWStockAI.entitlements"; sourceTree = "<group>"; };
+		009ABA155B44A8450570D903 /* TWStockAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TWStockAI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		166CC7BBEAFA4291F72826F4 /* TWStockAITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TWStockAITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		082056881DEA2981E88CB446 /* TWStockAIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TWStockAIUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F4834CC512CC4B4111352BE0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8D79C9E346542C9711A12B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B8FECF441E220EAB91EFC649 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4D3880AFDC2F259778766270 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				C4B52D49C154EF6A16D14C57 /* AIAnalyzer.swift */,
+				55AECA5AC54E4164C5FF3E79 /* AnalysisModels.swift */,
+				432F9F0155EBBA3C5BF859ED /* Indicators.swift */,
+			);
+			path = "Analytics"; sourceTree = "<group>";
+		};
+		7B43D80F6435EA9E84A7B10D /* App */ = {
+			isa = PBXGroup;
+			children = (
+				855696CB07EEC90A39816640 /* AppState.swift */,
+				2EDC7880CBFA4B36BBBD25F0 /* TWStockAIApp.swift */,
+			);
+			path = "App"; sourceTree = "<group>";
+		};
+		AEC9A614D6EDFCB86CA4ABD2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				28D4C4101992CBA870B3CF11 /* StockModels.swift */,
+			);
+			path = "Models"; sourceTree = "<group>";
+		};
+		5BC680144DE6F29022A70687 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				594205558AC69CC559918D02 /* ExportService.swift */,
+				57359629395736CAEF3AA4B1 /* HTMLReportBuilder.swift */,
+				328E335C7317C03940319FA7 /* MarketDataError.swift */,
+				9CCDB5D32563E4902845069F /* MarketDataService.swift */,
+				C595F43D7324FF3C3FB02788 /* TPExClient.swift */,
+				F9DDBDCFCB8AC1607ACF5C27 /* TWSEClient.swift */,
+				C5602468BA6DF482D6CB5484 /* TWSEDateUtility.swift */,
+			);
+			path = "Services"; sourceTree = "<group>";
+		};
+		BDBDE47EB7BFF12838F3614D /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				5200ED84CF023E458EBA0FAB /* Theme.swift */,
+			);
+			path = "Theme"; sourceTree = "<group>";
+		};
+		DD427B79E1E5F52CA5A539BC /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				69DAF4467D18F5BC42898460 /* ChartSupport.swift */,
+				79F0BF83A6E65082DA0DE584 /* Gauges.swift */,
+				B49152D4D920B6F9750EE328 /* HeatMapView.swift */,
+				9FF1E7FC634A60460B158058 /* PanelCard.swift */,
+				4345E4F684C08CA2F6E7CED8 /* RadarChartView.swift */,
+			);
+			path = "Components"; sourceTree = "<group>";
+		};
+		5F0BAB6FA6D9243474572FC9 /* Panels */ = {
+			isa = PBXGroup;
+			children = (
+				439C5CB955D8D08FD6F3790D /* CorePanels.swift */,
+				6FE0B9401976E38783052FCC /* FlowPanels.swift */,
+				9575FECCD2E7A7D3ACD8BA92 /* MainChartPanel.swift */,
+				5ED99798677B27F0A358FDE6 /* SummaryPanels.swift */,
+			);
+			path = "Panels"; sourceTree = "<group>";
+		};
+		80D57D6AC4F1F9F344756B98 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DD427B79E1E5F52CA5A539BC /* Components */,
+				5F0BAB6FA6D9243474572FC9 /* Panels */,
+				7E6E07A1D813406F89622B9F /* AlertsView.swift */,
+				0C899D0708FD313AC9324A3B /* DashboardView.swift */,
+				735948A2E82938817798FA0D /* HeaderView.swift */,
+				301AD1F5B6110C0AFB8679FE /* KDMAChartView.swift */,
+				666EB8E28EAA621188EFE6DA /* MACDChartView.swift */,
+				2A3666DBAD7A43035AA17D9B /* RawDataTableView.swift */,
+				65012ACD6A92D82B803C0D94 /* ReportView.swift */,
+				F87AAE8E155186D76BB4069B /* RootView.swift */,
+				D07F75A25D68702EB66B0D1E /* ToolbarView.swift */,
+				F61BAF35C85A86D728517A9F /* WelcomeView.swift */,
+			);
+			path = "Views"; sourceTree = "<group>";
+		};
+		DB38DE0BD1A1FDD0C81697B7 /* TWStockAI */ = {
+			isa = PBXGroup;
+			children = (
+				4D3880AFDC2F259778766270 /* Analytics */,
+				7B43D80F6435EA9E84A7B10D /* App */,
+				AEC9A614D6EDFCB86CA4ABD2 /* Models */,
+				5BC680144DE6F29022A70687 /* Services */,
+				BDBDE47EB7BFF12838F3614D /* Theme */,
+				80D57D6AC4F1F9F344756B98 /* Views */,
+				3DB0AA1F0CA718952AE3F2F0 /* Assets.xcassets */,
+				658666380131B8FF135897FF /* TWStockAI.entitlements */,
+			);
+			name = "TWStockAI"; path = "TWStockAI"; sourceTree = "<group>";
+		};
+		3C360688239A28E23F097776 /* TWStockAITests */ = {
+			isa = PBXGroup;
+			children = (
+				F6A63E93D5EC01ACF02B5954 /* AIAnalyzerTests.swift */,
+				D82BFF42CB3E4FE98A124CE6 /* IndicatorsTests.swift */,
+				BCECC3035CFEF3D232BED33F /* LiveAPIIntegrationTests.swift */,
+				17B0E44A3E2A0DD1C37A9509 /* MarketDataServiceTests.swift */,
+				2E70C4341FDC1B03FFB64B98 /* ParsingTests.swift */,
+				8DACCBA69A2D4B89188C878E /* SnapshotRenderingTests.swift */,
+			);
+			name = "TWStockAITests"; path = "TWStockAITests"; sourceTree = "<group>";
+		};
+		FD0DC7137289CD8F215602E1 /* TWStockAIUITests */ = {
+			isa = PBXGroup;
+			children = (
+				AB6518C01450C107F9473F9D /* AppFlowUITests.swift */,
+			);
+			name = "TWStockAIUITests"; path = "TWStockAIUITests"; sourceTree = "<group>";
+		};
+		87DDFEF625783BAD53CCFAE4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				009ABA155B44A8450570D903 /* TWStockAI.app */,
+				166CC7BBEAFA4291F72826F4 /* TWStockAITests.xctest */,
+				082056881DEA2981E88CB446 /* TWStockAIUITests.xctest */,
+			);
+			name = "Products"; sourceTree = "<group>";
+		};
+		3709FFF8CF3D63FF4B9A281F /* MainGroup */ = {
+			isa = PBXGroup;
+			children = (
+				DB38DE0BD1A1FDD0C81697B7 /* TWStockAI */,
+				3C360688239A28E23F097776 /* TWStockAITests */,
+				FD0DC7137289CD8F215602E1 /* TWStockAIUITests */,
+				87DDFEF625783BAD53CCFAE4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B2D649EAEFC2358EB3663E6A /* TWStockAI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92D384380DE21FE89B9A6C7C /* Build configuration list for PBXNativeTarget "TWStockAI" */;
+			buildPhases = (
+				BD6014967C74189A5DD697B0 /* Sources */,
+				F4834CC512CC4B4111352BE0 /* Frameworks */,
+				43C1C7FED8EA004CFF098DCD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+
+			);
+			name = "TWStockAI";
+			productName = "TWStockAI";
+			productReference = 009ABA155B44A8450570D903 /* TWStockAI */;
+			productType = "com.apple.product-type.application";
+		};
+		701BE49919B0EF7E87285033 /* TWStockAITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F8CBF8C1D17D5BB4CB2D441 /* Build configuration list for PBXNativeTarget "TWStockAITests" */;
+			buildPhases = (
+				D91D5C278747718872C73685 /* Sources */,
+				D8D79C9E346542C9711A12B9 /* Frameworks */,
+				ACB0FC323CA2FA1712EC2DBC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FDDEF02CBB3A500913ED4498 /* PBXTargetDependency */,
+			);
+			name = "TWStockAITests";
+			productName = "TWStockAITests";
+			productReference = 166CC7BBEAFA4291F72826F4 /* TWStockAITests */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1A63D5E18D1D517F5ABBC0F4 /* TWStockAIUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F307DF6B56F8A80E0D49EF4E /* Build configuration list for PBXNativeTarget "TWStockAIUITests" */;
+			buildPhases = (
+				8F7E7029A6AC3BB2FA3DABAE /* Sources */,
+				B8FECF441E220EAB91EFC649 /* Frameworks */,
+				1A9F9D6EFCFA7CBA359EDC75 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EC18845A4F5B0D73A0ED2C12 /* PBXTargetDependency */,
+			);
+			name = "TWStockAIUITests";
+			productName = "TWStockAIUITests";
+			productReference = 082056881DEA2981E88CB446 /* TWStockAIUITests */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FDC0B631DC5F59D044C55B31 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					B2D649EAEFC2358EB3663E6A = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					701BE49919B0EF7E87285033 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = B2D649EAEFC2358EB3663E6A;
+					};
+					1A63D5E18D1D517F5ABBC0F4 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = B2D649EAEFC2358EB3663E6A;
+					};
+				};
+			};
+			buildConfigurationList = E85C91D769057C1329BE8664 /* Build configuration list for PBXProject "TWStockAI" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = "zh-Hant";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				"zh-Hant",
+				Base,
+			);
+			mainGroup = 3709FFF8CF3D63FF4B9A281F;
+			productRefGroup = 87DDFEF625783BAD53CCFAE4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B2D649EAEFC2358EB3663E6A /* TWStockAI */,
+				701BE49919B0EF7E87285033 /* TWStockAITests */,
+				1A63D5E18D1D517F5ABBC0F4 /* TWStockAIUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		43C1C7FED8EA004CFF098DCD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53501A254B61B8D1A3FAFF43 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ACB0FC323CA2FA1712EC2DBC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A9F9D6EFCFA7CBA359EDC75 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BD6014967C74189A5DD697B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA631BD0875B9B00294AB383 /* AIAnalyzer.swift in Sources */,
+				4A4666687519DCF493B5939B /* AnalysisModels.swift in Sources */,
+				7E2743764CB1AE11ACAE7C2A /* Indicators.swift in Sources */,
+				FE79D0E5F9923A74011A0AEC /* AppState.swift in Sources */,
+				CD9BE6CB2CC615A50A7A3EBB /* TWStockAIApp.swift in Sources */,
+				6C81039DCCE3EAE81642EB96 /* StockModels.swift in Sources */,
+				3F41819F6E234519C16D76A7 /* ExportService.swift in Sources */,
+				FBFE79666EB2970976DF6E30 /* HTMLReportBuilder.swift in Sources */,
+				F598C9A08209D40D24397AD6 /* MarketDataError.swift in Sources */,
+				8F846ACF2896474BF2F44D76 /* MarketDataService.swift in Sources */,
+				31A73778B17FC58D738A37CB /* TPExClient.swift in Sources */,
+				96B8D989C6AB5E1AF86C162A /* TWSEClient.swift in Sources */,
+				5157498819E4F074393E019F /* TWSEDateUtility.swift in Sources */,
+				6483503934AB8D02E8976DF8 /* Theme.swift in Sources */,
+				600EB2FF345E70F105429120 /* AlertsView.swift in Sources */,
+				BDF144D62637524684B8FF42 /* DashboardView.swift in Sources */,
+				442D9B2B73C2044EE92696EA /* HeaderView.swift in Sources */,
+				325C0D5008A24FDBAA6BA73A /* KDMAChartView.swift in Sources */,
+				EC252436456D4187BB8ECDD9 /* MACDChartView.swift in Sources */,
+				212AD4F0DB2F314B5B908092 /* RawDataTableView.swift in Sources */,
+				E802F4EF0A3A984296431A15 /* ReportView.swift in Sources */,
+				4BE9E7E6CC62AFA9B5F14798 /* RootView.swift in Sources */,
+				826F0611221BC82C676C15E4 /* ToolbarView.swift in Sources */,
+				3FFDC91017695A7DBD90AEB5 /* WelcomeView.swift in Sources */,
+				4D895B21785DB2163A02F1BC /* ChartSupport.swift in Sources */,
+				4BD2D8AA0EF7E3476CF19BED /* Gauges.swift in Sources */,
+				2ADA92126F89EFAD90330975 /* HeatMapView.swift in Sources */,
+				0F3F79F885F5BD5281AF7CB3 /* PanelCard.swift in Sources */,
+				AFD9C7200696A5F1062F3749 /* RadarChartView.swift in Sources */,
+				1FC47E25D6981891187CAFF5 /* CorePanels.swift in Sources */,
+				E4EA8BBE6F8DD53473A2E55E /* FlowPanels.swift in Sources */,
+				B5A9BFEE31CE2C4A66CECFCB /* MainChartPanel.swift in Sources */,
+				1FA2CF58B2056BDDD2241786 /* SummaryPanels.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D91D5C278747718872C73685 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D86999844433BC063FD9FAC /* AIAnalyzerTests.swift in Sources */,
+				E7079188C26C6B6AEABDFEDB /* IndicatorsTests.swift in Sources */,
+				9576A190F56CF9D489B7EED5 /* LiveAPIIntegrationTests.swift in Sources */,
+				B2828D1D13E1F128BA09C79B /* MarketDataServiceTests.swift in Sources */,
+				8541D1472CA504012CFB2EF4 /* ParsingTests.swift in Sources */,
+				D4A623B73C05A7E95BE290CD /* SnapshotRenderingTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F7E7029A6AC3BB2FA3DABAE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				691C8F3C7459FED4B961F13B /* AppFlowUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FDDEF02CBB3A500913ED4498 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B2D649EAEFC2358EB3663E6A /* TWStockAI */;
+			targetProxy = 934C6EF0F0C9FD20BBBABF8A /* PBXContainerItemProxy */;
+		};
+		EC18845A4F5B0D73A0ED2C12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B2D649EAEFC2358EB3663E6A /* TWStockAI */;
+			targetProxy = 86C4FCB2D8C94569E77BB750 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5D85570AFBA7007828317095 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F00C161627B26EBF3A840AEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		51F5A1949F4D9EAC177FD7CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "TWStockAI/TWStockAI.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "台股 AI 分析";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bonzewu.TWStockAI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		20914EE4D5531EDE4D6B99BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "TWStockAI/TWStockAI.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "台股 AI 分析";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bonzewu.TWStockAI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		D9B29F3BAF98B2A34A848FB7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bonzewu.TWStockAITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TWStockAI.app/Contents/MacOS/TWStockAI";
+			};
+			name = Debug;
+		};
+		565B623E1224A4DB9446E1F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bonzewu.TWStockAITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TWStockAI.app/Contents/MacOS/TWStockAI";
+			};
+			name = Release;
+		};
+		902B7B7390F7BEC81910DE31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bonzewu.TWStockAIUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = "TWStockAI";
+			};
+			name = Debug;
+		};
+		F1CA1DCB78255016D0C1EDE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bonzewu.TWStockAIUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = "TWStockAI";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E85C91D769057C1329BE8664 /* Build configuration list for PBXProject "TWStockAI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5D85570AFBA7007828317095 /* Debug */,
+				F00C161627B26EBF3A840AEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		92D384380DE21FE89B9A6C7C /* Build configuration list for PBXNativeTarget "TWStockAI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51F5A1949F4D9EAC177FD7CF /* Debug */,
+				20914EE4D5531EDE4D6B99BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F8CBF8C1D17D5BB4CB2D441 /* Build configuration list for PBXNativeTarget "TWStockAITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D9B29F3BAF98B2A34A848FB7 /* Debug */,
+				565B623E1224A4DB9446E1F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F307DF6B56F8A80E0D49EF4E /* Build configuration list for PBXNativeTarget "TWStockAIUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				902B7B7390F7BEC81910DE31 /* Debug */,
+				F1CA1DCB78255016D0C1EDE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FDC0B631DC5F59D044C55B31 /* Project object */;
+}
