@@ -105,7 +105,7 @@ struct MACDChartView: View {
             }
         }
         .chartYScale(domain: ChartSupport.priceDomain(quotes: visibleRange.map { dataset.quotes[$0] }))
-        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound))
+        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound + 1))
         .chartYAxis { priceAxis }
         .chartXAxis { dateAxis }
         .chartPlotStyle { $0.background(Theme.background.opacity(0.4)) }
@@ -168,7 +168,7 @@ struct MACDChartView: View {
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
             }
         }
-        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound))
+        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound + 1))
         .chartYAxis { macdAxis }
         .chartXAxis { dateAxis }
         .chartPlotStyle { $0.background(Theme.background.opacity(0.4)) }

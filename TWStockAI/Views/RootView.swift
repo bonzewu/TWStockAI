@@ -38,18 +38,23 @@ struct RootView: View {
     @ViewBuilder
     private var content: some View {
         if let dataset = state.dataset, let analysis = state.analysis {
-            ScrollView {
-                Group {
-                    switch state.selectedTab {
-                    case .dashboard: DashboardView(dataset: dataset, analysis: analysis)
-                    case .report: ReportView(dataset: dataset, analysis: analysis)
-                    case .alerts: AlertsView(dataset: dataset, analysis: analysis)
-                    case .kdma: KDMAChartView(dataset: dataset, analysis: analysis)
-                    case .macd: MACDChartView(dataset: dataset, analysis: analysis)
-                    case .raw: RawDataTableView(dataset: dataset, analysis: analysis)
+            // 儀表板寬度大於視窗時需要水平捲動，否則兩側面板會被裁切；
+            // 同時以 minWidth 讓單一圖表分頁仍能撐滿可視寬度。
+            GeometryReader { proxy in
+                ScrollView([.vertical, .horizontal]) {
+                    Group {
+                        switch state.selectedTab {
+                        case .dashboard: DashboardView(dataset: dataset, analysis: analysis)
+                        case .report: ReportView(dataset: dataset, analysis: analysis)
+                        case .alerts: AlertsView(dataset: dataset, analysis: analysis)
+                        case .kdma: KDMAChartView(dataset: dataset, analysis: analysis)
+                        case .macd: MACDChartView(dataset: dataset, analysis: analysis)
+                        case .raw: RawDataTableView(dataset: dataset, analysis: analysis)
+                        }
                     }
+                    .padding(14)
+                    .frame(minWidth: proxy.size.width, alignment: .topLeading)
                 }
-                .padding(14)
             }
             .background(Theme.background)
 

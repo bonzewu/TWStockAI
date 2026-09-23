@@ -86,6 +86,14 @@ struct HeaderView: View {
     @ViewBuilder
     private var summaryStrip: some View {
         if let dataset = state.dataset, let latest = dataset.latest {
+            // 視窗較窄時讓摘要列自行捲動，避免右側欄位被擠出畫面
+            ScrollView(.horizontal, showsIndicators: false) {
+                summaryCells(dataset: dataset, latest: latest)
+            }
+        }
+    }
+
+    private func summaryCells(dataset: StockDataset, latest: DailyQuote) -> some View {
             HStack(spacing: 0) {
                 identityCell(dataset: dataset)
                 cell(title: "今日收盤價", value: Format.price(latest.close), tint: Theme.changeColor(latest.change))
@@ -102,7 +110,6 @@ struct HeaderView: View {
             .background(Theme.panelElevated)
             .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Theme.border))
             .clipShape(RoundedRectangle(cornerRadius: 8))
-        }
     }
 
     private func identityCell(dataset: StockDataset) -> some View {

@@ -96,7 +96,7 @@ struct MainChartPanel: View {
             quotes: visibleRange.map { dataset.quotes[$0] },
             extra: [analysis.pressureZone, analysis.supportZone, analysis.mainForceCost]
         ))
-        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound))
+        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound + 1))
         .chartYAxis {
             AxisMarks(position: .leading) { value in
                 AxisGridLine().foregroundStyle(Theme.grid)
@@ -134,7 +134,7 @@ struct MainChartPanel: View {
                 .foregroundStyle((point.quote.isBullish ? Theme.bullish : Theme.bearish).opacity(0.75))
             }
         }
-        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound))
+        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound + 1))
         .chartYAxis {
             AxisMarks(position: .leading, values: .automatic(desiredCount: 3)) { value in
                 AxisGridLine().foregroundStyle(Theme.grid)

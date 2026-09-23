@@ -91,7 +91,7 @@ struct KDMAChartView: View {
             }
         }
         .chartYScale(domain: ChartSupport.priceDomain(quotes: visibleRange.map { dataset.quotes[$0] }))
-        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound))
+        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound + 1))
         .chartYAxis { styledYAxis(label: "價格 (元)") }
         .chartXAxis { styledXAxis }
         .chartPlotStyle { $0.background(Theme.background.opacity(0.4)) }
@@ -159,7 +159,7 @@ struct KDMAChartView: View {
             }
         }
         .chartYScale(domain: 0...100)
-        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound))
+        .chartXScale(domain: (visibleRange.lowerBound - 1)...(visibleRange.upperBound + 1))
         .chartYAxis { styledYAxis(label: "KD") }
         .chartXAxis { styledXAxis }
         .chartPlotStyle { $0.background(Theme.background.opacity(0.4)) }

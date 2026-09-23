@@ -96,7 +96,7 @@ open ~/Library/Developer/Xcode/DerivedData/TWStockAI-*/Build/Products/Debug/TWSt
 3. 以上方分頁切換儀表板與四大任務報告
 4. 以工具列按鈕匯出 PNG／CSV／HTML／PDF
 
-快捷鍵：`⌘R` 重新分析、`⌘N` 回到起始畫面。
+快捷鍵：`⌘R` 重新分析、`⌘⇧N` 回到起始畫面、`⌘N` 開新視窗。
 
 ## 專案結構
 
